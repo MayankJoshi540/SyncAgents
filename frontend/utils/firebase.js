@@ -19,7 +19,12 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+let analytics = null;
+try {
+  analytics = getAnalytics(app);
+} catch (e) {
+  console.warn("Analytics initialization failed:", e);
+}
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider()
 

@@ -1,31 +1,18 @@
-import React from 'react'
-import { auth, googleProvider } from '../utils/firebase'
-import { signInWithPopup } from 'firebase/auth'
-import api from '../utils/axios'
+import React from 'react';
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Home from './pages/Home';
+import useCurrentUser from './hooks/useCurrentUser';
 
-const App = () => {
-  const googleLogin = async()=>{
-    const data = await signInWithPopup(auth, googleProvider);
-    const token = await data.user.getIdToken();
-    console.log(token);
-    await handleLogin(token);
-    console.log(data);
-  }
-  const handleLogin = async(token)=>{
-    try{
-      const {data} = await api.post("/auth/login",{token});
-      console.log(data);
-    }catch(error){
-      console.log(error);
-    }
-  }
+function App() {
+  useCurrentUser();
+ 
   return (
-    <div className='w-full h-screen bg-black flex justify-center items-center'>
-      <button onClick={googleLogin} className='w-[250px] h-[45px] bg-white rounded-lg flex justify-center items-center cursor-pointer'>
-        continue with google
-      </button>
-    </div>
-  )
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<Home/>}/>
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;

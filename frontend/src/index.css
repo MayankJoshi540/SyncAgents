@@ -1,1 +1,47 @@
 @import "tailwindcss";
+
+@theme {
+  --color-brand-green: #10a37f;
+  --color-brand-dark: #212121;
+  --color-brand-sidebar: #171717;
+  --color-brand-input: #2f2f2f;
+  --color-card-border: rgba(255, 255, 255, 0.08);
+}
+
+/* Custom Scrollbar Styles (Slim & Muted) */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+/* Soft card styling matching ChatGPT */
+.chatgpt-card {
+  background: #2f2f2f;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.chatgpt-btn-green {
+  background-color: #10a37f;
+  color: white;
+}
+.chatgpt-btn-green:hover {
+  background-color: #1a7f64;
+}
+
+/* Responsive constraints for chat view */
+.chat-container-max {
+  max-width: 48rem; /* 768px matching ChatGPT center column */
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
