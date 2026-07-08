@@ -1,6 +1,6 @@
 import redisClient from "../../shared/redis/redis.js"
 
-const authMiddleware = async(req,res,next)=>{
+const protect = async(req,res,next)=>{
     try{
        const sessionId = req.cookies?.session || req.cookies?.session_id
        if(!sessionId){
@@ -18,4 +18,4 @@ const authMiddleware = async(req,res,next)=>{
     }
 }
 
-export default authMiddleware
+export default protect
