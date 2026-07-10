@@ -1,5 +1,7 @@
 import fs from "fs";
-import pdf from "pdf-parse";
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+const pdf = require("pdf-parse");
 import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 import { createVectorStore } from "../utils/vectorStore.js";
 import {
@@ -11,7 +13,7 @@ import { getModel }
 from "../utils/model.js";
 import { QdrantVectorStore } from "@langchain/qdrant";
 export const pdfRagAgent = async (state) => {
-
+  let collectionName = "";
   try {
 
     const buffer =
@@ -19,13 +21,10 @@ export const pdfRagAgent = async (state) => {
         state.file.path
       );
 
-    const result =
-      await pdf(
-        buffer
-      );
+    const parsedPdf = await pdf(buffer);
 
     const text =
-      result.text;
+      parsedPdf.text;
 
     const splitter =
       new RecursiveCharacterTextSplitter({
@@ -43,8 +42,8 @@ export const pdfRagAgent = async (state) => {
 
       ]);
 
-   const collectionName =
-`pdf-${Date.now()}`;
+    collectionName =
+ `pdf-${Date.now()}`;
 
 const vectorStore =await createVectorStore(
 
@@ -75,7 +74,7 @@ const llm =getModel("pdf-rag");
 
 new SystemMessage(`
 
-You are SyncAgents PDF Assistant.
+You are CortexAI PDF Assistant.
 
 Rules:
 
@@ -131,15 +130,17 @@ response.content
 
     try{
 
-        fs.unlinkSync(
-            state.file.path
-        );
+        if (state.file && state.file.path) {
+            fs.unlinkSync(
+                state.file.path
+            );
+        }
 
-        await QdrantVectorStore.deleteCollection(
-
-            collectionName
-
-        );
+        if (collectionName) {
+            await QdrantVectorStore.deleteCollection(
+                collectionName
+            );
+        }
 
     }
 

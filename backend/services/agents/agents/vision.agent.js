@@ -37,7 +37,7 @@ export const visionAgent = async (state) => {
 
       new SystemMessage(`
 
-You are SyncAgents Vision Agent.
+You are CortexAI Vision Agent.
 
 Rules:
 
