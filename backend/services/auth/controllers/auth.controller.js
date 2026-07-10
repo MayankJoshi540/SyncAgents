@@ -68,4 +68,48 @@ export const getCurrentUser = async (req, res) => {
         console.log(error);
         return res.status(500).json({ message: "Internal server error" });
     }
-}   
+}
+
+export const deductCredits = async (req, res) => {
+    try {
+        const { userId, agent } = req.body;
+        console.log("Deduct credits request:", { userId, agent });
+        
+        const allUsers = await User.find({});
+        console.log("All users in Auth DB:", allUsers.map(u => ({ id: u._id, email: u.email })));
+
+        const user = await User.findById(userId);
+        if (!user) {
+            console.log("User not found for ID:", userId);
+            return res.status(404).json({ message: "User not found" });
+        }
+        
+        const cost = 10;
+        
+        if (user.credits < cost) {
+            return res.status(400).json({
+                title: "Insufficient Credits",
+                message: "You don't have enough credits. Please upgrade your plan."
+            });
+        }
+        
+        user.credits -= cost;
+        await user.save();
+        
+        // Also update session in redis so subsequent /api/me requests see the updated credit balance!
+        const sessionId = req.cookies?.session;
+        if (sessionId) {
+            const userData = await redisClient.get(`session:${sessionId}`);
+            if (userData) {
+                const parsed = JSON.parse(userData);
+                parsed.credits = user.credits;
+                await redisClient.set(`session:${sessionId}`, JSON.stringify(parsed), 'EX', 60*60*24*7);
+            }
+        }
+        
+        return res.status(200).json({ success: true, credits: user.credits });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: error.message });
+    }
+};   

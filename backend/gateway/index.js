@@ -1,11 +1,10 @@
 import express from "express";
 import dotenv from "dotenv";
-import proxy from "express-http-proxy";
 import cors from "cors"
 import cookieParser from "cookie-parser";
 import getCurrentUser from "./controller/user.controller.js";
 import protect from "./middleware/auth.middleware.js";
-import { proxyWithUser } from "./utils/proxyWithHeaders.js";
+import { proxyWithUser, customProxy } from "./utils/proxyWithHeaders.js";
 dotenv.config();
 
 const port = process.env.PORT;
@@ -16,19 +15,11 @@ app.use(cors({
     credentials : true
 }))
 app.use(cookieParser())
-app.use("/api/auth", proxy(process.env.AUTH_SERVICE_URL, {
-    proxyErrorHandler: function(err, res, next) {
-        console.error("Gateway Auth Proxy Error:", err.message || err);
-        return res.status(500).json({ 
-            message: "Auth Service is currently unreachable or encountered an error.", 
-            error: err.message 
-        });
-    }
-}))
+app.use("/api/auth", customProxy(process.env.AUTH_SERVICE_URL))
 
 app.get("/api/me",protect,getCurrentUser);
 app.use("/api/chat",protect,proxyWithUser(process.env.CHAT_SERVICE))  
-app.use("/api/agent",protect,proxy(process.env.AGENT_SERVICE_URL));
+app.use("/api/agent",protect,proxyWithUser(process.env.AGENT_SERVICE_URL));
 app.get("/",(req,res)=>{
     res.json({message : "hello from gateway"});
 });
@@ -36,4 +27,3 @@ app.get("/",(req,res)=>{
 app.listen(port,()=>{
     console.log(`gateway is running at ${port}`);
 });
-

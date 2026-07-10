@@ -1,5 +1,5 @@
 import fs from "fs";
-import {PDFParse} from "pdf-parse";
+import pdf from "pdf-parse";
 import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 import { createVectorStore } from "../utils/vectorStore.js";
 import {
@@ -19,15 +19,10 @@ export const pdfRagAgent = async (state) => {
         state.file.path
       );
 
-    const pdf =
-      new PDFParse({
-
-        data: buffer
-
-      });
-
     const result =
-      await pdf.getText();
+      await pdf(
+        buffer
+      );
 
     const text =
       result.text;
@@ -80,7 +75,7 @@ const llm =getModel("pdf-rag");
 
 new SystemMessage(`
 
-You are CortexAI PDF Assistant.
+You are SyncAgents PDF Assistant.
 
 Rules:
 

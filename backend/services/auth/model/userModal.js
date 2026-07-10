@@ -7,7 +7,15 @@ const userSchema = new mongoose.Schema({
     },
     name:String,
     email:String,
-    avatar:String
+    avatar:String,
+    credits: {
+        type: Number,
+        default: 1000
+    },
+    totalCredits: {
+        type: Number,
+        default: 1000
+    }
 },{
     timestamps: true
 })

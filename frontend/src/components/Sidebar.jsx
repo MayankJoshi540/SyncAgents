@@ -20,10 +20,11 @@ export default function Sidebar() {
 const [showBilling, setShowBilling] =useState(false);
   const logout = async () => {
     try {
-      await api.get("/api/auth/logout");
-      dispatch(setUserData(null));
+      await api.post("/api/auth/logout");
     } catch (error) {
       console.log(error);
+    } finally {
+      dispatch(setUserData(null));
     }
   };
 
@@ -130,7 +131,7 @@ const [showBilling, setShowBilling] =useState(false);
           <X size={15} />
         </button>
 
-        <span className="text-[16px] font-semibold text-slate-100 tracking-tight flex-1">CortexAI</span>
+        <span className="text-[16px] font-semibold text-slate-100 tracking-tight flex-1">SyncAgents</span>
 
         <span className="text-[10px] font-medium text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-2 py-0.5 rounded-full tracking-wide">
          {userData?.plan ?? "pro"}

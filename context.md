@@ -7,7 +7,7 @@ SyncAgents is a microservice-based AI agent platform that provides users with mu
 ## 📂 Codebase Directory Layout
 
 ```text
-cortex-ai/
+syncagents-ai/
 ├── backend/
 │   ├── gateway/                  # Express Gateway API (Port 8000)
 │   ├── shared/                   # Shared modules (e.g. Redis client wrapper)

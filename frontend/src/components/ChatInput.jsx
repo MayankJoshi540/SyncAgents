@@ -32,9 +32,9 @@ setSelectedFile
 
    const placeholders={
 
-auto:"Ask CortexAI...",
+auto:"Ask SyncAgents...",
 
-chat:"Chat with CortexAI...",
+chat:"Chat with SyncAgents...",
 
 coding:"Describe the software you want...",
 
@@ -263,6 +263,12 @@ catch(error){
        dispatch(setIsLoading(false));
     }
   };
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
+  };
 
   return (
    <div className="w-full overflow-hidden px-3 md:px-5 py-4 border-t border-white/[0.06] bg-[#0d0f14]">
@@ -433,6 +439,7 @@ className="text-slate-500 hover:text-white"
         <textarea
           value={value}
           onChange={e => setValue(e.target.value)}
+          onKeyDown={handleKeyDown}
           placeholder={
 placeholders[selectedAgent]
 }
@@ -553,7 +560,7 @@ isListening
       </div>
 
       <p className="text-center text-[10.5px] text-slate-700 mt-2.5">
-        CortexAI can make mistakes. Verify important info.
+        SyncAgents can make mistakes. Verify important info.
       </p>
     </div>
   );
