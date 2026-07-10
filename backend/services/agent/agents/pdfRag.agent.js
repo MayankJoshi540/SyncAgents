@@ -74,7 +74,7 @@ const llm =getModel("pdf-rag");
 
 new SystemMessage(`
 
-You are CortexAI PDF Assistant.
+You are SyncAgents PDF Assistant.
 
 Rules:
 
